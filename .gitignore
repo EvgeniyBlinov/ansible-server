@@ -1,0 +1,17 @@
+.idea
+.vscode
+.DS_Store
+
+ansible.log
+*.retry
+*.pyc
+
+.python
+
+inventory/*
+inventory/**/.*
+inventory/**/host_vars/*
+inventory/**/.secrets
+!inventory/localhost
+
+.env

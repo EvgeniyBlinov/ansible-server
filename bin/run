@@ -1,0 +1,27 @@
+#!/bin/bash
+set -o allexport
+SCRIPT_PATH=`dirname $0`
+ABSOLUTE_PATH=`readlink -m ${SCRIPT_PATH}`
+ROOT_PATH=`readlink -m ${ABSOLUTE_PATH}/..`
+ANSIBLE_VAULT_PASSWORD_FILE=${ANSIBLE_VAULT_PASSWORD_FILE:-~/.ssh/.ansible-vault-token}
+
+#set -o nounset -o pipefail -o errexit
+set \
+    -o nounset \
+    -o pipefail
+
+# Load all variables from .env and export them all for Ansible to read
+if [ -f "${ROOT_PATH}/.env" ]; then
+    source "${ROOT_PATH}/.env"
+fi
+set +o allexport
+
+########################################################################
+
+(
+cd $ROOT_PATH &&                                                   \
+    source $ROOT_PATH/.python/bin/activate &&                      \
+    time                                                           \
+    "$@" &&                                                        \
+    deactivate 'destructive'
+)
