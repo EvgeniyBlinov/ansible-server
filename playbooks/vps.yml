@@ -1,4 +1,5 @@
 ---
 - hosts: all
   roles:
-    - galaxy-user-settings
+    - role: galaxy-user-settings
+      tags: galaxy-user-settings
