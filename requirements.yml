@@ -1,0 +1,4 @@
+---
+- name: galaxy-user-settings
+  src: https://github.com/EvgeniyBlinov/ansible-role-user-settings.git
+  #version: v0.0.0-patch3

@@ -20,7 +20,8 @@ build:                       \
 		.env-include         \
 		requirements         \
 		.python/bin/activate \
-		$(ANSIBLE_VAULT_PASSWORD_FILE)
+		$(ANSIBLE_VAULT_PASSWORD_FILE) \
+		ansible-requirements
 
 
 .env:
@@ -95,3 +96,12 @@ $(ANSIBLE_VAULT_PASSWORD_FILE):
 	chmod 600 $@
 
 ########################################################################
+
+.PHONY: ansible-requirements
+ansible-requirements:
+	bin/run ansible-galaxy install -r requirements.yml
+
+.PHONY: lint
+lint:
+	bin/run yamllint ./.yamllint ./{inventory,playbooks,roles}
+
