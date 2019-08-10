@@ -1,0 +1,4 @@
+---
+iptables_persistent__packages:
+  - iptables
+  - iptables-persistent

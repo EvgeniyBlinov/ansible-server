@@ -1,0 +1,5 @@
+---
+- name: iptables-persistent | Ensure iptables-persistent packages are installed
+  package:
+    name: "{{ iptables_persistent__packages }}"
+    state: present

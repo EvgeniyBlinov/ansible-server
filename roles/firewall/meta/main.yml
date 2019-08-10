@@ -1,0 +1,4 @@
+---
+dependencies:
+  - firewall/iptables-persistent
+  - firewall/iptables-rules
