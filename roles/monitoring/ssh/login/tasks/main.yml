@@ -1,0 +1,14 @@
+---
+- name: monitoring__ssh__login | Set pamd for ssh
+  lineinfile:
+    path: /etc/pam.d/sshd
+    regexp: '/usr/local/sbin/sshd-login'
+    line: 'session   optional   pam_exec.so   /usr/local/sbin/sshd-login'
+  when: monitoring__ssh__login__webhook_url | length
+
+- name: monitoring__ssh__login | Generate webhook script
+  template:
+    src: ssh-login
+    dest: /usr/local/sbin/sshd-login
+    mode: +x
+  when: monitoring__ssh__login__webhook_url | length

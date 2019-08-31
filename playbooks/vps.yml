@@ -5,3 +5,7 @@
       tags: galaxy-user-settings
     - role: firewall
       tags: firewall
+    #- role: ingress
+      #tags: ingress
+    - role: monitoring
+      tags: monitoring
