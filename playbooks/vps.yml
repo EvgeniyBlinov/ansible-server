@@ -3,8 +3,8 @@
   roles:
     - role: galaxy-user-settings
       tags: galaxy-user-settings
-    #- role: firewall
-      #tags: firewall
+    - role: firewall
+      tags: firewall
     #- role: ingress
       #tags: ingress
     - role: galaxy-openvpn
