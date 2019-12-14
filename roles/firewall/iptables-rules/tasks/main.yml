@@ -1,0 +1,10 @@
+---
+- name: iptables-rules |
+  iptables_raw:
+    keep_unmanaged: "{{ iptables_rules__keep_unmanaged }}"
+    name: "{{ item.name | default('custom', True) }}"
+    rules: "{{ item.rules }}"
+    state: "{{ item.state | default('present', True) }}"
+    weight: "{{ item.weight | default(omit) }}"
+    table: "{{ item.table | default(omit) }}"
+  loop: "{{ iptables_rules }}"

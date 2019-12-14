@@ -1,0 +1,5 @@
+---
+## Keep existing rules by default.
+iptables_rules__keep_unmanaged: yes
+
+iptables_rules: []
