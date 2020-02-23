@@ -1,0 +1,15 @@
+---
+nginx__sites_dir: /etc/nginx/sites-enabled
+nginx__sites:
+  default:
+    content: |
+      server {
+        listen 80 default_server;
+        listen [::]:80 default_server;
+        server_name _;
+        root /var/www/html;
+        index index.html index.htm index.nginx-debian.html;
+        location / {
+            try_files $uri $uri/ =404;
+        }
+      }

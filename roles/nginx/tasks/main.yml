@@ -1,0 +1,13 @@
+---
+- name: nginx | Install nginx
+  package:
+    name: nginx
+    state: present
+
+- name: nginx | Generate config
+  copy:
+    content: "{{ item.value.content }}"
+    dest: "{{ nginx__sites_dir }}/{{ item.key }}"
+  loop: "{{ nginx__sites | dict2items}}"
+  notify:
+    - nginx-reload
