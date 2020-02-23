@@ -9,6 +9,7 @@
 
 
 vault__binary_path: /usr/local/bin/vault
+vault__storage_path: /var/lib/vault
 vault__user: vault
 
 vault__groups: []
@@ -19,7 +20,7 @@ vault__config: |
   {
     "backend": {
       "file": {
-        "path": "/var/lib/vault"
+        "path": "{{ vault__storage_path }}"
       }
     },
     "listener": {

@@ -25,4 +25,5 @@
       vars:
         vault__groups:
           - ssl-cert
-      tags: vault
+      tags:
+        - vault

@@ -38,8 +38,10 @@
     file:
       path: "{{ item }}"
       state: directory
+      owner: "{{ vault__user }}"
     loop:
       - "{{ vault__home_dir }}"
+      - "{{ vault__storage_path }}"
 
   - name: vault | Generate config
     copy:
@@ -54,3 +56,12 @@
       #- systemd-daemon-reload
       - vault-restart
   when: vault__installed
+
+- debug:
+    msg: |
+      Connect to vault
+      'nohup ssh -fN -L1{{ vault__port }}:localhost:{{ vault__port }} {{ ansible_host }} > /dev/null 2>&1 &'
+      'VAULT_ADDR=http://127.0.0.1:1{{ vault__port }}'
+      'vault operator init -tls-skip-verify'
+  tags:
+    - banner
