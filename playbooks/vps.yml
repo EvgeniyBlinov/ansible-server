@@ -11,7 +11,7 @@
       tags: openvpn
     - role: monitoring
       tags: monitoring
-    - role: galaxy-certbot
-      tags: certbot
     - role: nginx
       tags: nginx
+    - role: galaxy-certbot
+      tags: certbot
