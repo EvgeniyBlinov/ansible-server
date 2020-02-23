@@ -4,3 +4,8 @@
   #version: v0.0.0-patch3
 - name: galaxy-openvpn
   src: https://github.com/EvgeniyBlinov/ansible-role-server-openvpn.git
+
+- name: galaxy-certbot
+  src: https://github.com/geerlingguy/ansible-role-certbot
+  version: 3.0.3
+

@@ -2,12 +2,16 @@
 - hosts: all
   roles:
     - role: galaxy-user-settings
-      tags: galaxy-user-settings
+      tags: user-settings
     - role: firewall
       tags: firewall
     #- role: ingress
       #tags: ingress
     - role: galaxy-openvpn
-      tags: galaxy-openvpn
+      tags: openvpn
     - role: monitoring
       tags: monitoring
+    - role: galaxy-certbot
+      tags: certbot
+    - role: nginx
+      tags: nginx
