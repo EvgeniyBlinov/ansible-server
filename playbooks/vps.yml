@@ -13,5 +13,16 @@
       tags: monitoring
     - role: nginx
       tags: nginx
+
+    - role: group
+      vars:
+        group__name: ssl-cert
+      tags: group
+
     - role: galaxy-certbot
       tags: certbot
+    - role: vault
+      vars:
+        vault__groups:
+          - ssl-cert
+      tags: vault
