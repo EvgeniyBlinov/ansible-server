@@ -1,0 +1,34 @@
+---
+## (command|binary|custom_binary)
+#vault__install_type: command
+#vault__install_command: |
+  #wget --quiet --output-document=/tmp/vault.zip https://releases.hashicorp.com/vault/${VAULT_VERSION}/vault_${VAULT_VERSION}_linux_amd64.zip && \
+    #unzip /tmp/vault.zip -d /vault && \
+    #rm -f /tmp/vault.zip && \
+    #chmod +x /vault
+
+
+vault__binary_path: /usr/local/bin/vault
+vault__user: vault
+
+vault__groups: []
+
+vault__port: 8200
+vault__config_path: /etc/vault/config.json
+vault__config: |
+  {
+    "backend": {
+      "file": {
+        "path": "/var/lib/vault"
+      }
+    },
+    "listener": {
+      "tcp":{
+        "address": "0.0.0.0:{{ vault__port }}",
+        "tls_disable": 1
+      }
+    },
+    "ui": true,
+    "disable_mlock": false
+  }
+

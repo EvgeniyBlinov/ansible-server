@@ -1,0 +1,9 @@
+---
+- name: group | Create group
+  group:
+    name: "{{ group__name }}"
+    state: present
+  when: group__name is defined and
+    (group__name |length > 0)
+
+

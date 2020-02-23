@@ -1,0 +1,56 @@
+---
+- block:
+  - name: vault | Install binary
+    command: which vault
+    register: vault__r_exists
+    ignore_errors: yes
+
+  - set_fact:
+      vault__installed: "{{ ( vault__r_exists.stdout | length ) > 0 }}"
+  when: vault__installed is undefined
+
+- block:
+  - set_fact:
+      vault__home_dir: "{{ vault__config_path | dirname }}"
+
+  - name: vault | Set binary capabilities
+    capabilities:
+      path: "{{ vault__binary_path }}"
+      capability: cap_ipc_lock=+ep
+      state: present
+
+    ## allow system port < 1024
+  - name: vault | Set binary capabilities
+    capabilities:
+      path: "{{ vault__binary_path }}"
+      capability: cap_net_bind_service=+ep
+      state: present
+
+  - name: vault | Create user
+    user:
+      name: "{{ vault__user }}"
+      groups: "{{ vault__groups }}"
+      system: yes
+      home: "{{ vault__home_dir }}"
+      shell: /bin/false
+
+  - name: vault | Create dirs
+    file:
+      path: "{{ item }}"
+      state: directory
+    loop:
+      - "{{ vault__home_dir }}"
+
+  - name: vault | Generate config
+    copy:
+      content: "{{ vault__config }}"
+      dest: "{{ vault__config_path }}"
+
+  - name: vault | Generate service
+    template:
+      src: vault.service
+      dest: /etc/systemd/system/vault.service
+    notify:
+      #- systemd-daemon-reload
+      - vault-restart
+  when: vault__installed
