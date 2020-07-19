@@ -8,7 +8,7 @@
 
 - name: monitoring__ssh__login | Generate webhook script
   template:
-    src: ssh-login
+    src: "ssh-login-{{ monitoring__ssh__login__im }}"
     dest: /usr/local/sbin/sshd-login
     mode: +x
   when: monitoring__ssh__login__webhook_url | length

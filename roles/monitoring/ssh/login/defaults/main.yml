@@ -1,2 +1,5 @@
 ---
 monitoring__ssh__login__webhook_url: ''
+## (telegram|slack)
+monitoring__ssh__login__im: telegram
+monitoring__ssh__login__im_chat_id:

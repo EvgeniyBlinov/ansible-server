@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+
+WEBHOOK_URL="{{ monitoring__ssh__login__webhook_url }}"
+MESSAGE_ATTR={{ 'text' if monitoring__ssh__login__webhook_url is search('slack') else 'content' }}
+CHAT_ID="{{ monitoring__ssh__login__im_chat_id }}"
+
+HOST_INFO=$(curl -s https://ipinfo.io/${PAM_RHOST} | tr '"' "'")
+LOGIN_MSG="$PAM_USER logged in (remote host: $PAM_RHOST, host info: ${HOST_INFO})."
+LOGOUT_MSG="$PAM_USER logged out (remote host: $PAM_RHOST, host info: ${HOST_INFO})."
+#MESSAGE="$PAM_USER@$PAM_RHOST: knock knock via $PAM_SERVICE"
+
+case "$PAM_TYPE" in
+    open_session)
+        MESSAGE="${LOGIN_MSG}"
+        ;;
+    close_session)
+        MESSAGE="${LOGOUT_MSG}"
+        ;;
+esac
+
+# Let's only perform a request if there is an actual payload to send.
+if [ -n "$MESSAGE" ] ; then
+    curl -s -X POST "${WEBHOOK_URL}" -d chat_id="$CHAT_ID" -d text="$MESSAGE" > /dev/null 2>&1
+fi
