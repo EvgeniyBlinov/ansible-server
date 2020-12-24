@@ -5,8 +5,16 @@ MESSAGE_ATTR={{ 'text' if monitoring__ssh__login__webhook_url is search('slack')
 CHAT_ID="{{ monitoring__ssh__login__im_chat_id }}"
 
 HOST_INFO=$(curl -s https://ipinfo.io/${PAM_RHOST} | tr '"' "'")
-LOGIN_MSG="$PAM_USER logged in (remote host: $PAM_RHOST, host info: ${HOST_INFO})."
-LOGOUT_MSG="$PAM_USER logged out (remote host: $PAM_RHOST, host info: ${HOST_INFO})."
+set -o allexport
+eval $(grep "Accepted.*${PAM_RHOST}" /var/log/auth.log | tail -1 |
+    awk '{print "SSH_KEY_SHA="$NF"\nSSH_IP="$(NF-5)}')
+set +o allexport
+
+PAM_SSH_RUSER=$(ssh-keygen -lf <(cat ~/.ssh/authorized_keys*) | grep "${SSH_KEY_SHA}" |tail -1 | awk '{print $(NF-1)}')
+PAM_INFO="PAM_RHOST=${PAM_RHOST};PAM_RUSER=${PAM_RUSER};PAM_SERVICE=${PAM_SERVICE};PAM_TTY=${PAM_TTY};PAM_USER=${PAM_USER};PAM_TYPE=${PAM_TYPE}"
+
+LOGIN_MSG="$PAM_SSH_RUSER logged in as $PAM_USER via $PAM_SERVICE (remote host: $PAM_RHOST, host info: ${HOST_INFO})."
+LOGOUT_MSG="$PAM_SSH_RUSER logged out as $PAM_USER via $PAM_SERVICE (remote host: $PAM_RHOST, host info: ${HOST_INFO})."
 #MESSAGE="$PAM_USER@$PAM_RHOST: knock knock via $PAM_SERVICE"
 
 case "$PAM_TYPE" in
@@ -18,7 +26,8 @@ case "$PAM_TYPE" in
         ;;
 esac
 
-# Let's only perform a request if there is an actual payload to send.
+
+## Let's only perform a request if there is an actual payload to send.
 if [ -n "$MESSAGE" ] ; then
     curl -s -X POST "${WEBHOOK_URL}" -d chat_id="$CHAT_ID" -d text="$MESSAGE" > /dev/null 2>&1
 fi
