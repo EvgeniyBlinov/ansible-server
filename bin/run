@@ -1,9 +1,7 @@
 #!/bin/bash
-set -o allexport
 SCRIPT_PATH=`dirname $0`
 ABSOLUTE_PATH=`readlink -m ${SCRIPT_PATH}`
 ROOT_PATH=`readlink -m ${ABSOLUTE_PATH}/..`
-ANSIBLE_VAULT_PASSWORD_FILE=${ANSIBLE_VAULT_PASSWORD_FILE:-~/.ssh/.ansible-vault-token}
 
 #set -o nounset -o pipefail -o errexit
 set \
@@ -11,17 +9,36 @@ set \
     -o pipefail
 
 # Load all variables from .env and export them all for Ansible to read
-if [ -f "${ROOT_PATH}/.env" ]; then
-    source "${ROOT_PATH}/.env"
-fi
+set -o allexport
+source "${ROOT_PATH}/.env"
 set +o allexport
 
 ########################################################################
+INVENTORY_NAME=${INVENTORY_NAME:-localhost}
+INVENTORY=${INVENTORY:-inventory/${INVENTORY_NAME}/}
+PLAYBOOK_NAME="$1"
 
-(
-cd $ROOT_PATH &&                                                   \
-    source $ROOT_PATH/.python/bin/activate &&                      \
-    time                                                           \
-    "$@" &&                                                        \
-    deactivate 'destructive'
-)
+FIRST_ARG_EXT=${PLAYBOOK_NAME##*.}
+
+## !! inventory_dir shoould be a directory, because kubespray use it !!
+
+if [ "xpy" == "x${FIRST_ARG_EXT}" ]; then
+    (
+    cd $ROOT_PATH &&                                                   \
+        source $ROOT_PATH/.python/bin/activate &&                      \
+        /usr/bin/env python3 "$@" &&                                   \
+        deactivate 'destructive'
+    )
+else
+    (
+    cd $ROOT_PATH &&                                                   \
+        source $ROOT_PATH/.python/bin/activate &&                      \
+        time                                                           \
+        ansible-playbook                                               \
+        -i $(pwd)/inventory/${INVENTORY_NAME}/hosts.yml                \
+        -e inventory_dir="$(pwd)/inventory/${INVENTORY_NAME}"          \
+        -e ansible_root_dir="$(pwd)"                                   \
+        "$@" &&                                                        \
+        deactivate 'destructive'
+    )
+fi
