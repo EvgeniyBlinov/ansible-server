@@ -16,3 +16,15 @@ ingress:
     - docker
     - docker-compose
 ```
+
+- swapfile
+
+```
+fallocate -l 200M /swapfile
+chmod 600 /swapfile
+mkswap /swapfile
+swapon /swapfile
+
+sysctl vm.swappiness=10
+echo 'vm.swappiness=10' >> /etc/sysctl.conf
+```
