@@ -1,0 +1,4 @@
+---
+ssh__sshd_config:
+  #- { key: "PermitRootLogin", value: "no" }
+  - { key: "PasswordAuthentication", value: "no" }

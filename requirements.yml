@@ -9,3 +9,7 @@
   src: https://github.com/geerlingguy/ansible-role-certbot
   version: 3.0.3
 
+- name: galaxy-docker
+  src: https://github.com/geerlingguy/ansible-role-docker
+  version: 4.1.3
+

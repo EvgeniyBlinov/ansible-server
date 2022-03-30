@@ -1,12 +1,19 @@
 ---
 - hosts: all
+  environment:
+    DEBIAN_FRONTEND: 'noninteractive'
   roles:
+    - role: system/ssh
+      tags: system
     - role: galaxy-user-settings
       tags: user-settings
     - role: firewall
       tags: firewall
     #- role: ingress
       #tags: ingress
+
+    - role: galaxy-docker
+      tags: docker
     - role: galaxy-openvpn
       tags: openvpn
     - role: monitoring
@@ -19,11 +26,12 @@
         group__name: ssl-cert
       tags: group
 
+        # @TODO:  <31-03-22, Evgeniy Blinov <evgeniy_blinov@mail.ru>> : not work
     - role: galaxy-certbot
       tags: certbot
-    - role: vault
-      vars:
-        vault__groups:
-          - ssl-cert
-      tags:
-        - vault
+    #- role: vault
+      #vars:
+        #vault__groups:
+          #- ssl-cert
+      #tags:
+        #- vault

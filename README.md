@@ -1,7 +1,19 @@
 # ansible-server
 ansible-server
 
+## Usage
+
+```
+bin/run playbooks/vps.yml --skip-tags firewall
+
+## test ssh and
+
+bin/run playbooks/vps.yml --tags firewall
+```
+
 ### @TODO
+
+- backup
 
 ```
 pam golang:
