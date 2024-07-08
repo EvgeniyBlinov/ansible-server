@@ -2,36 +2,38 @@
 - hosts: all
   environment:
     DEBIAN_FRONTEND: 'noninteractive'
-  roles:
-    - role: system/ssh
-      tags: system
-    - role: galaxy-user-settings
-      tags: user-settings
-    - role: firewall
-      tags: firewall
-    #- role: ingress
-      #tags: ingress
+  roles: []
+    ########################################################################
+    ### !!! OLD - NOT WORKED
+    #- role: system/ssh
+      #tags: system
+    #- role: galaxy-user-settings
+      #tags: user-settings
+    #- role: firewall
+      #tags: firewall
+    ##- role: ingress
+      ##tags: ingress
 
-    - role: galaxy-docker
-      tags: docker
-    - role: galaxy-openvpn
-      tags: openvpn
-    - role: monitoring
-      tags: monitoring
-    - role: nginx
-      tags: nginx
+    #- role: galaxy-docker
+      #tags: docker
+    #- role: galaxy-openvpn
+      #tags: openvpn
+    #- role: monitoring
+      #tags: monitoring
+    #- role: nginx
+      #tags: nginx
 
-    - role: group
-      vars:
-        group__name: ssl-cert
-      tags: group
-
-        # @TODO:  <31-03-22, Evgeniy Blinov <evgeniy_blinov@mail.ru>> : not work
-    - role: galaxy-certbot
-      tags: certbot
-    #- role: vault
+    #- role: group
       #vars:
-        #vault__groups:
-          #- ssl-cert
-      #tags:
-        #- vault
+        #group__name: ssl-cert
+      #tags: group
+
+        ## @TODO:  <31-03-22, Evgeniy Blinov <evgeniy_blinov@mail.ru>> : not work
+    #- role: galaxy-certbot
+      #tags: certbot
+    ##- role: vault
+      ##vars:
+        ##vault__groups:
+          ##- ssl-cert
+      ##tags:
+        ##- vault
